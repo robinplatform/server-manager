@@ -1,0 +1,6 @@
+{
+	"id": "server-manager",
+	"name": "Server Manager",
+	"page": "./src/app.tsx",
+	"pageIcon": "browser"
+}
