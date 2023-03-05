@@ -1,15 +1,15 @@
 import React from "react";
 import { renderApp } from "@robinplatform/toolkit/react";
-import { useRpcQuery } from "@robinplatform/toolkit/react/rpc";
-import { getOsInfo } from "./app.server";
+import "@robinplatform/toolkit/styles.css";
+import "./global.scss";
+import "./app.scss";
 
 const App = () => {
-	const { data: osInfo } = useRpcQuery(getOsInfo, {});
-	if (!osInfo) {
-		return <p>Loading...</p>;
-	}
-
-	return <p>You're on {osInfo?.platform}!</p>;
+  return (
+    <div className="appContainer robin-pad robin-bg-dark-blue robin-rounded">
+      <p>hello world</p>
+    </div>
+  );
 };
 
 renderApp(<App />);
