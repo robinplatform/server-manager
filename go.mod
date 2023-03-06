@@ -1,3 +1,3 @@
-module github.com/robinplatform/server-manager
+module robinplatform.dev/smgr
 
 go 1.20

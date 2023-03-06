@@ -3,5 +3,5 @@
 	"name": "Server Manager",
 	"page": "./src/app.tsx",
 	"pageIcon": "browser",
-	"daemon": ["go", "run", "./server"]
+	"daemon": ["go", "run", "./cmd/server"]
 }

@@ -8,7 +8,7 @@ import { z } from "zod";
 
 const App = () => {
 	const { data, error } = useRemoteAppMethod(
-		"getHelloWorld",
+		"SayHello",
 		{},
 		{
 			resultType: z.object({ message: z.string() }),
