@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 )
 
@@ -10,6 +9,5 @@ func init() {
 }
 
 func GetServers(res http.ResponseWriter, req *http.Request) {
-	fmt.Printf("servers: %#v\n", serverManager.Servers)
 	sendJson(res, serverManager.Servers)
 }

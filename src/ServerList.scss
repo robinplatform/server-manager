@@ -1,0 +1,35 @@
+.serverListContainer {
+    width: 25%;
+}
+
+.serverList {
+    display: flex;
+    flex-direction: column;
+}
+
+.serverControlPanel {
+    width: 75%;
+    padding: 0 var(--robin-spacing);
+}
+
+.serverControlPanelHeading {
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.serverListItem {
+    text-align: left;
+    padding: 0.5rem;
+    background: none;
+
+    color: var(--robin-white);
+    border-radius: var(--robin-border-radius);
+
+    &:hover {
+        background: var(--robin-color-dark-purple);
+    }
+
+    &.active {
+        background: var(--robin-color-light-blue);
+    }
+}

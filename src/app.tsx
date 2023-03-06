@@ -1,26 +1,29 @@
+import { ServerList } from "./ServerList";
 import "./app.scss";
 import "./global.scss";
 import { renderApp } from "@robinplatform/toolkit/react";
-import { useRemoteAppMethod } from "@robinplatform/toolkit/react/rpc";
 import "@robinplatform/toolkit/styles.css";
 import React from "react";
-import { z } from "zod";
 
 const App = () => {
-	const { data, error } = useRemoteAppMethod(
-		"SayHello",
-		{},
-		{
-			resultType: z.object({ message: z.string() }),
-		},
+	const [selectedServer, setSelectedServer] = React.useState<string | null>(
+		null,
 	);
 
 	return (
 		<div className="appContainer robin-pad robin-bg-dark-blue robin-rounded">
-			<>
-				{error && <p>{String(error)}</p>}
-				{data && <p>{data.message}</p>}
-			</>
+			<div className="serverListContainer">
+				<ServerList
+					selectedServer={selectedServer}
+					onSelectServer={(server) => setSelectedServer(server)}
+				/>
+			</div>
+
+			{selectedServer && (
+				<div className='serverControlPanel'>
+					<h1 className='serverControlPanelHeading'>{selectedServer}</h1>
+				</div>
+			)}
 		</div>
 	);
 };

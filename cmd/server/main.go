@@ -46,18 +46,11 @@ func main() {
 
 	lastRequestTime := new(int64)
 
-	http.HandleFunc("/api/SayHello", func(res http.ResponseWriter, req *http.Request) {
-		sendJson(res, map[string]string{
-			"type": "success",
-			"message": "Hello World",
-		})
-	})
 	http.HandleFunc("/api/health", func(res http.ResponseWriter, req *http.Request) {
 		sendJson(res, map[string]string{
 			"status": "ok",
 		})
 	})
-
 	server := http.Server{
 		Addr: fmt.Sprintf(":%s", port),
 		Handler: http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -73,7 +66,7 @@ func main() {
 		for {
 			<-time.After(5 * time.Second)
 
-			if time.Now().Unix()-atomic.LoadInt64(lastRequestTime) > 3 {
+			if time.Now().Unix()-atomic.LoadInt64(lastRequestTime) > 60 {
 				fmt.Printf("No requests for 1 min, shutting down\n")
 				server.Shutdown(context.Background())
 			}
