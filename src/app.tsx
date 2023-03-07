@@ -1,29 +1,22 @@
+import { ControlPanel } from "./ControlPanel";
 import { ServerList } from "./ServerList";
 import "./app.scss";
 import "./global.scss";
+import { useSelectedServer } from "./hooks/useSelectedServer";
 import { renderApp } from "@robinplatform/toolkit/react";
 import "@robinplatform/toolkit/styles.css";
 import React from "react";
 
 const App = () => {
-	const [selectedServer, setSelectedServer] = React.useState<string | null>(
-		null,
-	);
+	const { selectedServer } = useSelectedServer();
 
 	return (
 		<div className="appContainer robin-pad robin-bg-dark-blue robin-rounded">
 			<div className="serverListContainer">
-				<ServerList
-					selectedServer={selectedServer}
-					onSelectServer={(server) => setSelectedServer(server)}
-				/>
+				<ServerList />
 			</div>
 
-			{selectedServer && (
-				<div className='serverControlPanel'>
-					<h1 className='serverControlPanelHeading'>{selectedServer}</h1>
-				</div>
-			)}
+			{selectedServer && <ControlPanel />}
 		</div>
 	);
 };

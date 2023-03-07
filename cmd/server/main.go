@@ -17,7 +17,7 @@ var (
 	port = os.Getenv("PORT")
 	projectPath = os.Getenv("ROBIN_PROJECT_PATH")
 
-	serverManager = manager.ServerManager{}
+	serverManager = manager.New()
 )
 
 func writeRes(res http.ResponseWriter, statusCode int, body any) {

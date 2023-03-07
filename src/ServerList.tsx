@@ -1,4 +1,6 @@
 import "./ServerList.scss";
+import { useHistory } from "./hooks/useHistory";
+import { useSelectedServer } from "./hooks/useSelectedServer";
 import { useRemoteAppMethod } from "@robinplatform/toolkit/react/rpc";
 import cx from "classnames";
 import React from "react";
@@ -10,10 +12,11 @@ const ServerType = z.object({
 type ServerType = z.infer<typeof ServerType>;
 
 const ServerListItem: React.FC<{
-	selectedServer: string | null;
 	server: ServerType;
 	onClick: () => void;
-}> = ({ selectedServer, server, onClick }) => {
+}> = ({ server, onClick }) => {
+	const { selectedServer } = useSelectedServer();
+
 	return (
 		<button
 			type={"button"}
@@ -29,10 +32,9 @@ const ServerListItem: React.FC<{
 
 const ServerListType = z.array(ServerType);
 
-export const ServerList: React.FC<{
-	selectedServer: string | null;
-	onSelectServer(server: string): void;
-}> = ({ selectedServer, onSelectServer }) => {
+export const ServerList: React.FC = () => {
+	const { selectedServer, setSelectedServer } = useSelectedServer();
+	const history = useHistory();
 	const { data: servers, error } = useRemoteAppMethod(
 		"GetServers",
 		{},
@@ -43,7 +45,7 @@ export const ServerList: React.FC<{
 
 	React.useEffect(() => {
 		if (servers?.length && !selectedServer) {
-			onSelectServer(servers[0].name);
+			setSelectedServer(servers[0].name);
 		}
 	}, [servers]);
 
@@ -55,9 +57,11 @@ export const ServerList: React.FC<{
 				{servers?.map((server) => (
 					<ServerListItem
 						key={server.name}
-						selectedServer={selectedServer}
 						server={server}
-						onClick={() => onSelectServer(server.name)}
+						onClick={() => {
+							setSelectedServer(server.name);
+							history.push(`/server/${server.name}`);
+						}}
 					/>
 				))}
 			</div>
