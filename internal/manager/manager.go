@@ -8,22 +8,12 @@ import (
 	"os"
 	"path/filepath"
 	"sync"
+
+	"robinplatform.dev/smgr/internal/manager/health"
 )
-
-type HealthCheckType string
-
-const (
-	HealthCheckTypeHttp HealthCheckType = "http"
-	HealthCheckTypeTcp HealthCheckType = "tcp"
-)
-
-type HealthCheck struct {
-	Type HealthCheckType `json:"type"`
-	Port int `json:"port"`
-}
 
 type DevServerConfig struct {
-	HealthChecks []HealthCheck `json:"healthChecks,omitempty"`
+	HealthChecks []health.HealthCheck `json:"healthChecks,omitempty"`
 	Command string `json:"command"`
 }
 

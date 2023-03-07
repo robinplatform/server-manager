@@ -1,15 +1,9 @@
 import "./ServerList.scss";
+import { ServerType, useRpcQuery } from "./bridge";
 import { useHistory } from "./hooks/useHistory";
 import { useSelectedServer } from "./hooks/useSelectedServer";
-import { useRemoteAppMethod } from "@robinplatform/toolkit/react/rpc";
 import cx from "classnames";
 import React from "react";
-import { z } from "zod";
-
-const ServerType = z.object({
-	name: z.string(),
-});
-type ServerType = z.infer<typeof ServerType>;
 
 const ServerListItem: React.FC<{
 	server: ServerType;
@@ -30,18 +24,10 @@ const ServerListItem: React.FC<{
 	);
 };
 
-const ServerListType = z.array(ServerType);
-
 export const ServerList: React.FC = () => {
 	const { selectedServer, setSelectedServer } = useSelectedServer();
 	const history = useHistory();
-	const { data: servers, error } = useRemoteAppMethod(
-		"GetServers",
-		{},
-		{
-			resultType: ServerListType,
-		},
-	);
+	const { data: servers, error } = useRpcQuery("GetServers", {});
 
 	React.useEffect(() => {
 		if (servers?.length && !selectedServer) {
