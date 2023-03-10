@@ -1,13 +1,16 @@
 {
-	"editor.formatOnSave": true,
-    "prettier.enable": false,
-    "eslint.enable": false,
-	"editor.defaultFormatter": "rome.rome",
-	"editor.codeActionsOnSave": {
-		"source.organizeImports": false,
-		"source.organizeImports.rome": true
-	},
-	"[typescriptreact]": {
-		"editor.defaultFormatter": "rome.rome"
-	}
+  "editor.formatOnSave": true,
+  "prettier.enable": false,
+  "eslint.enable": false,
+  "editor.defaultFormatter": "rome.rome",
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": false,
+    "source.organizeImports.rome": true
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "rome.rome"
+  },
+  "[go]": {
+    "editor.defaultFormatter": "golang.go"
+  }
 }
