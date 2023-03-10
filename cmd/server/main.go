@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	port = os.Getenv("PORT")
+	port        = os.Getenv("PORT")
 	projectPath = os.Getenv("ROBIN_PROJECT_PATH")
 
 	serverManager = manager.New()
@@ -55,7 +55,13 @@ func main() {
 		Addr: fmt.Sprintf(":%s", port),
 		Handler: http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 			atomic.StoreInt64(lastRequestTime, time.Now().Unix())
-			fmt.Printf("%s %s\n", req.Method, req.URL.Path)
+
+			// TODO: This should eventually always print, but everything is a little
+			// borked right now, and since this gets hit every quarter-second right now,
+			// this would be a pain in the ass scroll through in the logs.
+			if req.URL.Path != "/api/health" {
+				fmt.Printf("%s %s\n", req.Method, req.URL.Path)
+			}
 
 			res.Header().Set("Content-Type", "application/json")
 			http.DefaultServeMux.ServeHTTP(res, req)
@@ -63,11 +69,12 @@ func main() {
 	}
 
 	go func() {
+		// TODO: This shouldn't be necessary, but we don't have auto-kill written yet.
 		for {
-			<-time.After(5 * time.Second)
+			<-time.After(1 * time.Second)
 
-			if time.Now().Unix()-atomic.LoadInt64(lastRequestTime) > 60 {
-				fmt.Printf("No requests for 1 min, shutting down\n")
+			if time.Now().Unix()-atomic.LoadInt64(lastRequestTime) > 1 {
+				fmt.Printf("No requests for a second, shutting down\n")
 				server.Shutdown(context.Background())
 			}
 		}
