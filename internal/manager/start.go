@@ -3,7 +3,7 @@ package manager
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 )
 
@@ -21,7 +21,7 @@ func StartServer(config DevServerConfig) error {
 
 	defer resp.Body.Close()
 
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 
 	fmt.Printf("resp body: %s\n", string(body))
 
