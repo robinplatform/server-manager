@@ -8,16 +8,17 @@ import { z } from "zod";
 export const ControlPanel: React.FC = () => {
 	const { selectedServer } = useSelectedServer();
 	const history = useHistory();
-	const { mutate } = useMutation<string, unknown, unknown, [string]>({
-		mutationKey: ["StartServer"],
-		mutationFn: () => {
-			runAppMethod({
+	const { mutate } = useMutation<null, unknown, void, [string]>({
+		mutationKey: ["StartServer", selectedServer],
+		mutationFn: async (): Promise<null> => {
+			await runAppMethod({
 				methodName: "StartServer",
 				resultType: z.any(),
 				data: {
 					server: selectedServer,
 				},
 			});
+
 			return null;
 		},
 	});
@@ -28,7 +29,7 @@ export const ControlPanel: React.FC = () => {
 
 			<p>{history.pathname}</p>
 
-			<button onClick={mutate}>Start</button>
+			<button onClick={() => mutate()}>Start</button>
 		</div>
 	);
 };
