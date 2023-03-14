@@ -12,7 +12,7 @@ const App = () => {
 
 	return (
 		<div className="appContainer robin-pad robin-bg-dark-blue robin-rounded">
-			<div className="serverListContainer">
+			<div className="leftSidebar">
 				<ServerList />
 			</div>
 

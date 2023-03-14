@@ -40,7 +40,8 @@ export const ServerList: React.FC = () => {
 			{error && <p>{String(error)}</p>}
 
 			<div className='serverList'>
-				{servers?.map((server) => (
+				{/* rome-ignore lint/suspicious/noExplicitAny: fuck off for now please, ill fix useRpcQuery later */}
+				{servers?.map((server: any) => (
 					<ServerListItem
 						key={server.name}
 						server={server}
