@@ -13,8 +13,9 @@ import (
 )
 
 type DevServerConfig struct {
+	Name         string               `json:"-"`
 	HealthChecks []health.HealthCheck `json:"healthChecks,omitempty"`
-	Command string `json:"command"`
+	Command      string               `json:"command"`
 }
 
 func (config *DevServerConfig) UnmarshalJSON(data []byte) error {
@@ -39,8 +40,8 @@ func (config *DevServerConfig) UnmarshalJSON(data []byte) error {
 type ServerManagerConfig struct {
 	FilePath string `json:"-"`
 
-	Name string `json:"name"`
-	DevServers map[string]DevServerConfig `json:"devServers"`
+	Name       string            `json:"name"`
+	DevServers []DevServerConfig `json:"devServers"`
 }
 
 func (config *ServerManagerConfig) load() error {
@@ -54,8 +55,32 @@ func (config *ServerManagerConfig) load() error {
 		return fmt.Errorf("failed to read server config from %s: %w", config.FilePath, err)
 	}
 
-	if err := json.Unmarshal(buf, config); err != nil {
+	type ServerConfigJSON struct {
+		HealthChecks []health.HealthCheck `json:"healthChecks,omitempty"`
+		Command      string               `json:"command"`
+	}
+
+	type ConfigJSON struct {
+		Name       string                      `json:"name"`
+		DevServers map[string]ServerConfigJSON `json:"devServers"`
+	}
+
+	var configTmp ConfigJSON
+	if err := json.Unmarshal(buf, &configTmp); err != nil {
 		return fmt.Errorf("failed to unmarshal server config from %s: %w", config.FilePath, err)
+	}
+
+	config.Name = configTmp.Name
+	config.DevServers = make([]DevServerConfig, 0, len(configTmp.DevServers))
+
+	for name, value := range configTmp.DevServers {
+		server := DevServerConfig{
+			Name:         name,
+			HealthChecks: value.HealthChecks,
+			Command:      value.Command,
+		}
+
+		config.DevServers = append(config.DevServers, server)
 	}
 
 	if config.Name == "" {
@@ -93,7 +118,7 @@ func (manager *ServerManager) DiscoverServers(projectPath string) error {
 		if dirEntry.IsDir() {
 			return nil
 		}
- 
+
 		if filepath.Base(filename) == "robin.servers.json" {
 			fmt.Printf("Discovered server config: %s\n", filename)
 
