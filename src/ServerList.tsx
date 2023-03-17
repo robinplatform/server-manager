@@ -10,6 +10,9 @@ const ServerListItem: React.FC<{
 	onClick: () => void;
 }> = ({ server, onClick }) => {
 	const { selectedServer } = useSelectedServer();
+	const { data: health } = useRpcQuery("CheckServerHealth", {
+		name: server.name,
+	});
 
 	return (
 		<button
@@ -19,7 +22,7 @@ const ServerListItem: React.FC<{
 			})}
 			onClick={onClick}
 		>
-			{server.name}
+			{server.name} {health}
 		</button>
 	);
 };
@@ -40,8 +43,7 @@ export const ServerList: React.FC = () => {
 			{error && <p>{String(error)}</p>}
 
 			<div className='serverList'>
-				{/* rome-ignore lint/suspicious/noExplicitAny: fuck off for now please, ill fix useRpcQuery later */}
-				{servers?.map((server: any) => (
+				{servers?.map((server) => (
 					<ServerListItem
 						key={server.name}
 						server={server}

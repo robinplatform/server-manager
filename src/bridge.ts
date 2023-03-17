@@ -11,9 +11,11 @@ const { useRpcQuery } = createReactRpcBridge({
     input: z.object({}),
     output: z.array(ServerType),
   },
-  StartServer: {
-    input: z.object({}),
-    output: z.any(),
+  CheckServerHealth: {
+    input: z.object({
+      name: z.string(),
+    }),
+    output: z.string(),
   },
 });
 
