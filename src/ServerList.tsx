@@ -10,6 +10,15 @@ const ServerListItem: React.FC<{
 	onClick: () => void;
 }> = ({ server, onClick }) => {
 	const { selectedServer } = useSelectedServer();
+	const { data: health } = useRpcQuery(
+		"CheckServerHealth",
+		{
+			name: server.name,
+		},
+		{
+			refetchInterval: 3000,
+		},
+	);
 
 	return (
 		<button
@@ -19,7 +28,7 @@ const ServerListItem: React.FC<{
 			})}
 			onClick={onClick}
 		>
-			{server.name}
+			{server.name} {JSON.stringify(health)}
 		</button>
 	);
 };
